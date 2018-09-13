@@ -10,10 +10,12 @@
 #include <stdlib.h>
 
 int main() {
-    int num;
-    FILE *file = fopen("/dev/null", "w");
-    while (scanf("%d", &num) != EOF) {
-        printf("%d\n",fprintf(file, "%d", num));
+    int n;
+    //FILE *file = fopen("/dev/null", "w");
+    char buffer[100];
+    while (scanf("%d", &n) != EOF) {
+        //printf("%d\n",fprintf(file, "%d", n));
+        printf("%d\n", sprintf(buffer, "%d", n));
     }
     return 0;
 }
