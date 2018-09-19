@@ -30,6 +30,7 @@ template<typename T> inline void sdf(T &x) {
 
 int main() {
     int n, a;
+    sdf(n);
     printf("%d\n", n);
     for (int i = 0; i < n; i++) {
         sdf(a);
