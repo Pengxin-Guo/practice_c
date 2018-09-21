@@ -11,7 +11,7 @@
 #include <inttypes.h>
 #include <math.h>
 
-int digit(int n) {
+int digit(long long n) {
     return floor(log10(n)) + 1;
 }
 
@@ -26,16 +26,16 @@ int my_printf(const char *frm, ...) {
                 i++;
                 switch(frm[i]) {
                     case 'd' : {
-                        int temp = va_arg(arg, int);
+                        long long temp = va_arg(arg, int);
                         if (temp < 0) {
                             putchar('-');
                             cnt++;
-                            if (temp == -temp) {
-                                putchar('2');putchar('1');putchar('4');putchar('7');putchar('4');
-                                putchar('8');putchar('3');putchar('6');putchar('4');putchar('8');
-                                cnt += 10;
-                                break;
-                            }
+                            //if (temp == -temp) {
+                            //    putchar('2');putchar('1');putchar('4');putchar('7');putchar('4');
+                            //    putchar('8');putchar('3');putchar('6');putchar('4');putchar('8');
+                            //    cnt += 10;
+                            //    break;
+                            //}
                             temp = -temp;
                         }
                         int dig_temp = digit(temp);
