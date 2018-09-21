@@ -31,7 +31,9 @@ int my_printf(const char *frm, ...) {
                             putchar('-');
                             cnt++;
                             if (temp == -temp) {
-                                putchar('X');
+                                putchar('2');putchar('1');putchar('4');putchar('7');putchar('4');
+                                putchar('8');putchar('3');putchar('6');putchar('4');putchar('8');
+                                cnt += 10;
                                 break;
                             }
                             temp = -temp;
@@ -69,7 +71,7 @@ int main() {
     my_printf("%d\n", my_printf("n = %d\n", n));
     my_printf("%d\n", my_printf("n = %d\n", 12000));
     my_printf("%d\n", my_printf("n = %d\n", -567));
-    //my_printf("%d\n", my_printf("n = %d\n", INT32_MIN));
+    my_printf("%d\n", my_printf("n = %d\n", INT32_MIN));
     my_printf("%d\n", my_printf("n = %d\n", INT32_MAX));
     return 0;
 }
