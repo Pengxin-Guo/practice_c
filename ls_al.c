@@ -28,31 +28,6 @@ void mode_to_letters(int mode, char str[]);
 char *uid_to_name(uid_t);
 char *gid_to_name(gid_t);
 
-int main(int ac,char *av[]){
-    int temp = 0,i = 2; //00 低位是ａ，高位是ｌ
-    *(++av);
-    for(i = 2; i <= ac && (*av)[0] == '-'; *(++av),i++){
-         strlen(*av) == 2 && (*av)[1] =='a'&& (temp |=1,1)||(*av)[1] == 'l' && (temp |= 2,1);
-         strlen(*av) == 3 && ((*av)[1] == 'a' && (*av)[2] == 'l' ||
-                              (*av)[1] == 'l' && (*av)[2] == 'a') && (temp |= 3,1);
-    }
-    if (i > ac) {
-        do_ls(".",temp);
-    }else if (i == ac) {
-        do_ls(*av,temp);
-    }
-    else{
-        while(i <= ac){
-            printf("%s:\n",*av);
-            do_ls(*av,temp);
-            *(++av);
-            i++;
-        }
-    }
-    return 0;
-}
-
-
 int comp(const void *a, const void *b){
     return strcmp((char *)a, (char *)b);
 }
@@ -87,6 +62,7 @@ void do_ls(char *dirname, int gon){
     }
     printf("\n");
 }
+
 void dostat( char *filename ,char dirname[],int gon){
     struct stat info;
     char pwdname[1000];
@@ -175,3 +151,26 @@ char* gid_to_name(gid_t gid){
     }
 }
 
+int main(int ac,char *av[]){
+    int temp = 0,i = 2; //00 低位是ａ，高位是ｌ
+    *(++av);
+    for(i = 2; i <= ac && (*av)[0] == '-'; *(++av),i++){
+         strlen(*av) == 2 && (*av)[1] =='a'&& (temp |=1,1)||(*av)[1] == 'l' && (temp |= 2,1);
+         strlen(*av) == 3 && ((*av)[1] == 'a' && (*av)[2] == 'l' ||
+                              (*av)[1] == 'l' && (*av)[2] == 'a') && (temp |= 3,1);
+    }
+    if (i > ac) {
+        do_ls(".",temp);
+    }else if (i == ac) {
+        do_ls(*av,temp);
+    }
+    else{
+        while(i <= ac){
+            printf("%s:\n",*av);
+            do_ls(*av,temp);
+            *(++av);
+            i++;
+        }
+    }
+    return 0;
+}
