@@ -1,9 +1,9 @@
 /*************************************************************************
-	> File Name: ls_al.c
-	> Author: gpx
-	> Mail: 1457495424@qq.com
-	> Created Time: 2018年09月22日 星期六 19时25分58秒
- ************************************************************************/
+> File Name: ls_al.c
+> Author: gpx
+> Mail: 1457495424@qq.com
+> Created Time: 2018年09月22日 星期六 19时25分58秒
+************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,27 +23,27 @@
 /*****************以下是一些系统自定义结构体****************
 
 struct dirent {
-   long d_ino;                                  // 索引节点号 
-   off_t d_off;                                 // 在目录文件中的偏移 
-   unsigned short d_reclen;                     // 文件名长 
-   unsigned char d_type;                        // 文件类型 
-   char d_name [NAME_MAX+1];                    // 文件名，最长255字符 
+long d_ino;                                  // 索引节点号 
+off_t d_off;                                 // 在目录文件中的偏移 
+unsigned short d_reclen;                     // 文件名长 
+unsigned char d_type;                        // 文件类型 
+char d_name [NAME_MAX+1];                    // 文件名，最长255字符 
 };
 
 struct stat {
-    mode_t st_mode;                             // 文件对应的模式，文件、目录等
-    ino_t st_ino;                               // inode节点号
-    dev_t st_dev;                               // 设备号码
-    dev_t st_rdev;                              // 特殊设备号码
-    nlink_t st_nlink;                           // 文件的连接数
-    uid_t st_uid;                               // 文件所有者
-    gid_t st_gid;                               // 文件所有者对应的组
-    off_t st_size;                              // 普通文件，对应的文件字节数
-    time_t st_atime;                            // 文件最后被访问的时间
-    time_t st_mtime;                            // 文件内容最后被修改的时间
-    time_t st_ctime;                            // 文件状态改变时间
-    blksize t st_blksize;                       // 文件内容对应的块大小
-    blkcnt_t st_blocks;                         // 文件内容对应的块数量
+mode_t st_mode;                              // 文件对应的模式，文件、目录等
+ino_t st_ino;                                // inode节点号
+dev_t st_dev;                                // 设备号码
+dev_t st_rdev;                               // 特殊设备号码
+nlink_t st_nlink;                            // 文件的连接数
+uid_t st_uid;                                // 文件所有者
+gid_t st_gid;                                // 文件所有者对应的组
+off_t st_size;                               // 普通文件，对应的文件字节数
+time_t st_atime;                             // 文件最后被访问的时间
+time_t st_mtime;                             // 文件内容最后被修改的时间
+time_t st_ctime;                             // 文件状态改变时间
+blksize t st_blksize;                        // 文件内容对应的块大小
+blkcnt_t st_blocks;                          // 文件内容对应的块数量
 };
 
 ***********************************************************/
@@ -68,12 +68,12 @@ void do_ls(char *dirname, int gon) {
     struct stat dir;
     char name[1000][255];
     int tn = 0;
-    
+
     if ((dir_ptr = opendir(dirname)) == NULL) {
         printf("ls:connot open %s\n", dirname);
     } else {
         while ((direntp = readdir(dir_ptr)) != NULL) {
-            if (gon & 1) {     //1
+            if (gon & 1) {     
                 strcpy(name[tn], direntp->d_name);
                 tn++;
             } else {
@@ -93,7 +93,7 @@ void do_ls(char *dirname, int gon) {
 void dostat(char *filename, char *dirname, int gon) {
     struct stat info;
     char pwdname[1000];
-    
+
     strcpy(pwdname, dirname);
     if (strcmp(dirname, ".") == 0) {
         strcpy(pwdname, filename);
@@ -155,10 +155,11 @@ char* uid_to_name(uid_t uid) {
         return pw_ptr->pw_name;
     }
 }
+
 char* gid_to_name(gid_t gid) {
     struct group *grp_ptr;
     static char numstr[10];
-    
+
     if ((grp_ptr = getgrgid(gid)) == NULL) {
         sprintf(numstr,"%d", gid);
         return numstr;
@@ -171,8 +172,8 @@ int main(int argc, char **argv) {
     int temp = 0, para;                    //temp = 1, 代表-a; temp = 2, 代表-l; temp = 3, 代表-al;
     *(++argv);
     for(para = 2; para <= argc && (*argv)[0] == '-'; ++argv, para++) {
-         strlen(*argv) == 2 && (*argv)[1] == 'a' && (temp |= 1, 1) || (*argv)[1] == 'l' && (temp |= 2, 1);
-         strlen(*argv) == 3 && ((*argv)[1] == 'a' && (*argv)[2] == 'l' || (*argv)[1] == 'l' && (*argv)[2] == 'a') && (temp |= 3, 1);
+        strlen(*argv) == 2 && (*argv)[1] == 'a' && (temp |= 1, 1) || (*argv)[1] == 'l' && (temp |= 2, 1);
+        strlen(*argv) == 3 && ((*argv)[1] == 'a' && (*argv)[2] == 'l' || (*argv)[1] == 'l' && (*argv)[2] == 'a') && (temp |= 3, 1);
     }
     if (para > argc) {
         do_ls(".", temp);
