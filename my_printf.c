@@ -12,6 +12,7 @@
 #include <math.h>
 
 int digit(long long n) {
+    if (n == 0) return 1;
     return floor(log10(n)) + 1;
 }
 
@@ -70,6 +71,7 @@ int main() {
     my_printf("%d\n", my_printf("hello world\n"));
     my_printf("%d\n", my_printf("n = %d\n", n));
     my_printf("%d\n", my_printf("n = %d\n", 12000));
+    my_printf("%d\n", my_printf("n = %d\n", 0));
     my_printf("%d\n", my_printf("n = %d\n", -567));
     my_printf("%d\n", my_printf("n = %d\n", INT32_MIN));
     my_printf("%d\n", my_printf("n = %d\n", INT32_MAX));
