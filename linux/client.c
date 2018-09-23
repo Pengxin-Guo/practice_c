@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     char buffer[MAX_SIZE];                                        //数据缓冲区
     struct sockaddr_in dest_addr;                                 //服务器端网络地址结构体
     int port = atoi(argv[2]);                                     //服务器端口号
-    char *host = argv[1];                                         //host代表服务器IP地址
+    char *host = argv[1];                                         //代表服务器IP地址
     if ((sock_client = socket(AF_INET, SOCK_STREAM, 0)) < 0) {    //建立socket
         perror("Socket");
         return -1;
