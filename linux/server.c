@@ -13,7 +13,7 @@
 
 int main() {
     int a = 0;
-	int server_listen, socketfd;
+	int server_listen, socketfd, pid;
     struct sockaddr_in my_addr;
     if ((server_listen = socket(AF_INET,SOCK_STREAM,0)) < 0) {                                    //建立socket
         perror("socket error");
@@ -34,21 +34,30 @@ int main() {
     while (1) {
         struct sockaddr_in client_addr;                                                           //客户端socket
         socklen_t len = sizeof(client_addr);
-        if ((socketfd = accept(server_listen, (struct sockaddr*)&client_addr, &len)) < 0) {
+        if ((socketfd = accept(server_listen, (struct sockaddr*)&client_addr, &len)) < 0) {       //建立服务器与客户端的连接
             perror("accept error");
             break;
         }
         bzero(&client_addr, len);
-        //getpeername(socketfd, (struct sockaddr *)&client_addr, &len);
         char client_mess[20] = {'\0'};
+        getpeername(socketfd, (struct sockaddr *)&client_addr, &len);                             //用于获取与某个套接字关联的外地协议地址
         inet_ntop(AF_INET, (void *)&client_addr.sin_addr, client_mess, 63);
-        char message[MAX_SIZE];
-        while ((a = recv(socketfd, message, MAX_SIZE, 0)) > 0) {
-            printf("%s:%d : recv %d 字节 %s\n", client_mess, ntohs(client_addr.sin_port), a, message);
-            fflush(stdout);
-            memset(message, 0, sizeof(message));
+        if ((pid = fork()) < 0) {
+            printf("Erroe forking child process\n");
         }
-        printf("\n");
+        if (pid == 0) {
+            close(server_listen);
+            char message[MAX_SIZE];
+            while ((a = recv(socketfd, message, MAX_SIZE, 0)) > 0) {
+                printf("%s:%d : recv %d 字节 %s\n", client_mess, ntohs(client_addr.sin_port), a, message);
+                fflush(stdout);
+                memset(message, 0, sizeof(message));
+            }
+            printf("\n");
+            close(socketfd);
+            exit(0);
+        }
+        //printf("par\n");
         close(socketfd);
     }
     close(server_listen);
