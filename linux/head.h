@@ -28,4 +28,4 @@
 #include <time.h>
 #include <stdarg.h>
 
-#define MAX_SIZE 100
+#define MAX_SIZE 1024

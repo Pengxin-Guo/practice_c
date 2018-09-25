@@ -25,6 +25,7 @@ int main() {
 	bzero(&(my_addr.sin_zero), sizeof(my_addr));                                                  //将其他属性置0
     if (bind(server_listen, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) < 0) {           //绑定地址结构体和socket
 		perror("bind error");
+        //close(server_listen);
 		return -1;
 	}
     if (listen(server_listen, 20) < 0) {                                                          //开启监听，第二个参数是最大监听数
