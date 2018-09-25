@@ -49,6 +49,7 @@ int main() {
             close(server_listen);
             char message[MAX_SIZE];
             while ((a = recv(socketfd, message, MAX_SIZE, 0)) > 0) {
+                message[a] = '\0';
                 printf("%s:%d : recv %d 字节 %s\n", client_mess, ntohs(client_addr.sin_port), a, message);
                 fflush(stdout);
                 memset(message, 0, sizeof(message));
