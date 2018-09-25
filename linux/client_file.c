@@ -32,7 +32,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     while (!feof(file)) {
-        fgets(buffer, sizeof(buffer), file);
+        //fgets(buffer, sizeof(buffer), file);
+        fread(buffer, sizeof(char), 1, file);
         send(sock_client, buffer, strlen(buffer), 0);
         memset(buffer, 0, sizeof(buffer));
     }
