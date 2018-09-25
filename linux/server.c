@@ -44,7 +44,7 @@ int main() {
         getpeername(socketfd, (struct sockaddr *)&client_addr, &len);                             //用于获取与某个套接字关联的外地协议地址
         inet_ntop(AF_INET, (void *)&client_addr.sin_addr, client_mess, 63);
         if ((pid = fork()) < 0) {
-            printf("Erroe forking child process\n");
+            perror("Erroe forking child process");
         }
         if (pid == 0) {
             close(server_listen);
