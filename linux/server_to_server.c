@@ -1,7 +1,7 @@
 /*************************************************************************
-> File Name: cl2.cpp
-> Author: ldc
-> Mail: litesla
+> File Name: server_to_server.c
+> Author: gpx
+> Mail: 1457495424@qq.com
 > Created Time: 2018年09月24日 星期一 10时25分36秒
 ************************************************************************/
 
@@ -32,12 +32,12 @@ int main(int av,char *argv[]) {
     if (pid <= 0) {
         while (1) {
             size = recv(fd_client, buffer, sizeof(buffer), 0);
-            if(size < 0) continue;
+            if (size < 0) continue;
             buffer[size] = '\0';
             printf("%s : ", inet_ntoa(dest_addr.sin_addr));
             printf("%s\n", buffer);
         }
-    }else{
+    } else {
         while (1) {
             scanf("%[^\n]s", buffer);
             getchar();
