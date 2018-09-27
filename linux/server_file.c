@@ -48,7 +48,7 @@ int main() {
             close(server_listen);
             char message[MAX_SIZE] = {0};
             FILE *fpwrite = fopen("./receive.txt", "w");
-            while ((a = recv(socketfd, message, MAX_SIZE, 0)) > 0) {
+            while ((a = recv(socketfd, message, MAX_SIZE - 1, 0)) > 0) {
                 message[a] = '\0';
                 fprintf(fpwrite, "%s", message);
                 //fflush(stdout);
