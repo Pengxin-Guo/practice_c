@@ -38,9 +38,9 @@ int main() {
             break;
         }
         bzero(&client_addr, len);
-        char client_mess[20] = {'\0'};
-        getpeername(socketfd, (struct sockaddr *)&client_addr, &len);                             //用于获取与某个套接字关联的外地协议地址
-        inet_ntop(AF_INET, (void *)&client_addr.sin_addr, client_mess, 63);
+        //char client_mess[20] = {'\0'};
+        //getpeername(socketfd, (struct sockaddr *)&client_addr, &len);                             //用于获取与某个套接字关联的外地协议地址
+        //inet_ntop(AF_INET, (void *)&client_addr.sin_addr, client_mess, 63);
         if ((pid = fork()) < 0) {
             perror("Erroe forking child process");
         }
