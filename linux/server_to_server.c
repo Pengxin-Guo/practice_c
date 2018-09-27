@@ -48,7 +48,3 @@ int main(int av,char *argv[]) {
     close(fd_client);
     return 0;
 }
-
-
-
-
