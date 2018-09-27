@@ -52,9 +52,10 @@ int main() {
                 message[a] = '\0';
                 fprintf(fpwrite, "%s", message);
                 //fflush(stdout);
-                //memset(message, 0, sizeof(message));
+                memset(message, 0, sizeof(message));
             }
             printf("\n");
+            fclose(fpwrite);
             close(socketfd);
             exit(0);
         }
