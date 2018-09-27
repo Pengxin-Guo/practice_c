@@ -5,8 +5,6 @@
 	> Created Time: 2018年09月23日 星期日 16时20分35秒
  ************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "./head.h"
 
 int main(int argc, char *argv[]) {

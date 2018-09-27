@@ -5,8 +5,6 @@
 > Created Time: 2018年09月24日 星期一 11时13分19秒
 ************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "./head.h"
 
 #define PORT 33333                                                                                //端口号
