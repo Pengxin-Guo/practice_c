@@ -51,28 +51,28 @@ int main() {
             if (opendir(client_mess) == NULL) {
                 mkdir(client_mess, 0755);
             }
-            char filecpu[10] = {0};
+            char filecpu[100] = {0};
             sprintf(filecpu, "./%s/CPULog.log", client_mess);
             fpcpu = fopen(filecpu, "a+");
-            char filedisk[10] = {0};
+            char filedisk[100] = {0};
             sprintf(filedisk, "./%s/DiskLog.log", client_mess);
             fpdisk = fopen(filedisk, "a+");
-            char filemem[10] = {0};
+            char filemem[100] = {0};
             sprintf(filemem, "./%s/MemLog.log", client_mess);
             fpmem = fopen(filemem, "a+");
             while ((a = recv(socketfd, message, MAX_SIZE - 1, 0)) > 0) {
                 message[a] = '\0';
                 //printf("%s\n", message); 
                 if (message[0] == 'c') {
-                    printf("%s***\n", message);
+                    //printf("%s***\n", message);
                     fprintf(fpcpu, "%s", message + 1);
                     memset(message, 0, sizeof(message));
                 } else if (message[0] == 'd') {
-                    printf("%s*****\n", message);
+                    //printf("%s*****\n", message);
                     fprintf(fpdisk, "%s", message + 1);
                     memset(message, 0, sizeof(message));
                 } else if (message[0] == 'm') {
-                    printf("%s********\n", message);
+                    //printf("%s********\n", message);
                     fprintf(fpmem, "%s", message + 1);
                     memset(message, 0, sizeof(message));
                 }
