@@ -47,47 +47,43 @@ int main() {
         if (pid == 0) {
             close(server_listen);
             char message[MAX_SIZE] = {0};
-            char flag[5] = {0};
             FILE *fpcpu, *fpdisk, *fpmem;
             if (opendir(client_mess) == NULL) {
                 mkdir(client_mess, 0755);
             }
-            recv(socketfd, flag, 5, 0);
-            if (strcmp(flag, "100") == 0) {
-                //printf("100\n");
-                char filecpu[10] = {0};
-                sprintf(filecpu, "./%s/CPULog.log", client_mess);
-                fpcpu = fopen(filecpu, "a+");
-                while (a = recv(socketfd,message, MAX_SIZE - 1, 0) > 0) {
-
-                    fprintf(fpcpu, "%s", message);
+            char filecpu[10] = {0};
+            sprintf(filecpu, "./%s/CPULog.log", client_mess);
+            fpcpu = fopen(filecpu, "a+");
+            char filedisk[10] = {0};
+            sprintf(filedisk, "./%s/DiskLog.log", client_mess);
+            fpdisk = fopen(filedisk, "a+");
+            char filemem[10] = {0};
+            sprintf(filemem, "./%s/MemLog.log", client_mess);
+            fpmem = fopen(filemem, "a+");
+            while ((a = recv(socketfd, message, MAX_SIZE - 1, 0)) > 0) {
+                message[a] = '\0';
+                //printf("%s\n", message); 
+                if (message[0] == 'c') {
+                    printf("%s***\n", message);
+                    fprintf(fpcpu, "%s", message + 1);
+                    memset(message, 0, sizeof(message));
+                } else if (message[0] == 'd') {
+                    printf("%s*****\n", message);
+                    fprintf(fpdisk, "%s", message + 1);
+                    memset(message, 0, sizeof(message));
+                } else if (message[0] == 'm') {
+                    printf("%s********\n", message);
+                    fprintf(fpmem, "%s", message + 1);
                     memset(message, 0, sizeof(message));
                 }
             }
-            if (strcmp(flag, "101") == 0) {
-                //printf("101\n");
-                char filedisk[10] = {0};
-                sprintf(filedisk, "./%s/DiskLog.log", client_mess);
-                fpdisk = fopen(filedisk, "a+");
-            }
-            if (strcmp(flag, "102") == 0) {
-                //printf("102\n");
-                char filemem[10] = {0};
-                sprintf(filemem, "./%s/MemLog.log", client_mess);
-                fpmem = fopen(filemem, "a+");
-            }
-            //FILE *fpwrite = fopen("./receive.txt", "w");
-            //while ((a = recv(socketfd, message, MAX_SIZE - 1, 0)) > 0) {
-            //    message[a] = '\0';
-            //    fprintf(fpwrite, "%s", message);
-            //    memset(message, 0, sizeof(message));
-            //}
-            printf("\n");
-            //fclose(fpwrite);
+            //printf("\n");
+            fclose(fpcpu);
+            fclose(fpdisk);
+            fclose(fpmem);
             close(socketfd);
             exit(0);
         }
-        //printf("par\n");
         close(socketfd);
     }
     close(server_listen);
