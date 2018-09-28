@@ -27,5 +27,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdarg.h>
+#include <sys/stat.h>
+
 
 #define MAX_SIZE 1024

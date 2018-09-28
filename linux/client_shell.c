@@ -24,21 +24,28 @@ int main(int argc, char *argv[]) {
         perror("Connent failed");
         return -1;
     }
+    char flag[5] = {0};
     FILE *fpcpu, *fpdisk, *fpmem;
     fpcpu = popen("~/Github/shell/DSMS_project/CPULog.sh", "r");
     fpdisk = popen("~/Github/shell/DSMS_project/DiskLog.sh", "r");
     fpmem = popen("~/Github/shell/DSMS_project/MemLog.sh 20", "r");
 
+    strcpy(flag, "100");                                              //100代表发送CPU信息
+    send(sock_client, flag, sizeof(flag), 0);
     while (NULL != fgets(buffer, sizeof(buffer), fpcpu)) {
         send(sock_client, buffer, strlen(buffer), 0);
         //memset(buffer, 0, sizeof(buffer));
     }
 
+    strcpy(flag, "101");                                               //101代表发送DISK信息
+    send(sock_client, flag, strlen(flag), 0);
     while (NULL != fgets(buffer, sizeof(buffer), fpdisk)) {
         send(sock_client, buffer, strlen(buffer), 0);
         //memset(buffer, 0, sizeof(buffer));
     }
     
+    strcpy(flag, "102");                                               //102代表发送MEM信息
+    send(sock_client, flag, strlen(flag), 0);
     while (NULL != fgets(buffer, sizeof(buffer), fpmem)) {
         send(sock_client, buffer, strlen(buffer), 0);
     }
