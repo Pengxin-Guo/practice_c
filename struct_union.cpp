@@ -1,5 +1,5 @@
 /*************************************************************************
-> File Name: struct_union.c
+> File Name: struct_union.cpp
 > Author: gpx
 > Mail: 1457495424@qq.com
 > Created Time: 2018年10月04日 星期四 12时08分12秒
