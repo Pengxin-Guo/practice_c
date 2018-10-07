@@ -3,7 +3,7 @@ CFLAGS =  -DTESTFUNC -std=c99 -g -Wall
 
 OBJS = main.o is_prime.o add.o test.o
 
-.PHONY = clean
+.PHONY : clean
 
 ./a.out : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS)
