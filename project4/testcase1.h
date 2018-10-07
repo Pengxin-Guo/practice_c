@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "is_prime.h"
-#include "test.h"
 
 TEST(test, is_prime_func) {
     EXPECT(is_prime(2), 0);

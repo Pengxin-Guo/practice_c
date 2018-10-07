@@ -13,6 +13,8 @@
     #include "testcase1.h"
     #include "testcase2.h"
     #include "testcase3.h"
+    #include "testcase4.h"
+    #include "testcase5.h"
 #endif
 
 int main() {
