@@ -7,14 +7,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "test.h"
+#include "./thirdpart/include/test.h"
 
 #ifdef TESTFUNC
     #include "testcase1.h"
     #include "testcase2.h"
+    #include "testcase3.h"
 #endif
 
 int main() {
-    printf("hello world\n");
+    printf("hello haizei\n");
     return RUN_ALL_TEST();
 }

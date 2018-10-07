@@ -11,7 +11,10 @@
 #include "add.h"
 
 TEST(test, add_func) {
-    EXPECT(add(1, 2), 3);
-    EXPECT(add(3, 4), 7);
-    EXPECT(add(2, 2), 4);
+    EXPECT_EQ(add(1, 2), 3);
+    EXPECT_NE(add(3, 4), 8);
+    EXPECT_GE(add(2, 2), 4);
+    EXPECT_GT(add(2, 7), 5);
+    EXPECT_LT(add(3, 8), 10);
+    EXPECT_LE(add(3, 5), 15);
 }

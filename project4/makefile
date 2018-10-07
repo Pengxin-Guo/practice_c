@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -I./thirdpart/include -DTESTFUNC -std=c99 -g -Wall
-OBJS = main.o is_prime.o add.o
+OBJS = main.o is_prime.o add.o binary_search.o func_binary.o
 
 .PHONY : clean
 
@@ -15,6 +15,12 @@ is_prime.o : is_prime.c is_prime.h
 
 add.o : add.c add.h
 	$(CC) -c $(CFLAGS) add.c
+
+binary_search.o : binary_search.c binary_search.h
+	$(CC) -c $(CFLAGS) binary_search.c
+
+func_binary.o : func_binary.c func_binary.h
+	$(CC) -c $(CFLAGS) func_binary.c
 
 clean :
 	rm -rf *.o a.out
