@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -I./thirdpart/include -DTESTFUNC -std=c99 -g -Wall
 OBJS = main.o is_prime.o add.o
 
-.PHONY = clean
+.PHONY : clean
 
 ./a.out : $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) thirdpart/libs/libtest.a
