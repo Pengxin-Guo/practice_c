@@ -9,11 +9,9 @@
 #define _TEST_H
 #include <stdlib.h>
 
-struct TestFuncData{
+struct TestFuncData {
     int total, expect;
 };
-
-typedef void (*test_func_t)(struct TestFuncData *);
 
 struct FuncData {
     const char *a_str, *b_str;
@@ -21,8 +19,11 @@ struct FuncData {
     struct FuncData *next;
 };
 
+typedef void (*test_func_t)(struct TestFuncData *);
 
 void addFuncData(const char *a, const char *b, test_func_t func);
+
+int RUN_ALL_TEST();
 
 #define TEST(a,b) \
     void a##_haizeix_##b(struct TestFuncData *); \
@@ -38,9 +39,6 @@ void addFuncData(const char *a, const char *b, test_func_t func);
     __data->total += 1; \
     __data->expect += ret; \
 })
-
-
-int RUN_ALL_TEST();
 
 
 #endif

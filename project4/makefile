@@ -13,7 +13,7 @@ main.o : main.c
 is_prime.o : is_prime.c is_prime.h
 	$(CC) -c $(CFLAGS) is_prime.c
 
-add.oo : add.c add.h
+add.o : add.c add.h
 	$(CC) -c $(CFLAGS) add.c
 
 clean :
