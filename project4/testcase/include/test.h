@@ -21,8 +21,9 @@ struct FuncData {
     struct FuncData *next;
 };
 
-
 void addFuncData(const char *a, const char *b, test_func_t func);
+
+int RUN_ALL_TEST();
 
 #define TEST(a,b) \
     void a##_haizeix_##b(struct TestFuncData *); \
@@ -39,8 +40,46 @@ void addFuncData(const char *a, const char *b, test_func_t func);
     __data->expect += ret; \
 })
 
+#define EXPECT_EQ(a, b) ({ \
+    int ret; \
+    printf("%s = %s %s\n", #a, #b, (ret = (a == b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
 
-int RUN_ALL_TEST();
+#define EXPECT_GT(a, b) ({ \
+    int ret; \
+    printf("%s > %s %s\n", #a, #b, (ret = (a > b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
 
+#define EXPECT_LT(a, b) ({ \
+    int ret; \
+    printf("%s < %s %s\n", #a, #b, (ret = (a < b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
+
+#define EXPECT_NE(a, b) ({ \
+    int ret; \
+    printf("%s != %s %s\n", #a, #b, (ret = (a != b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
+
+#define EXPECT_GE(a, b) ({ \
+    int ret; \
+    printf("%s >= %s %s\n", #a, #b, (ret = (a >= b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
+
+#define EXPECT_LE(a, b) ({ \
+    int ret; \
+    printf("%s <= %s %s\n", #a, #b, (ret = (a <= b)) ? "True" : "False"); \
+    __data->total += 1; \
+    __data->expect += ret; \
+})
 
 #endif
