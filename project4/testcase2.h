@@ -5,8 +5,9 @@
 	> Created Time: 2018年10月07日 星期日 11时30分58秒
  ************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
+
+#ifndef _TESTCASE2_H
+#define _TESTCASE2_H
 #include "test.h"
 #include "add.h"
 
@@ -18,3 +19,5 @@ TEST(test, add_func) {
     EXPECT_LT(add(3, 8), 10);
     EXPECT_LE(add(3, 5), 15);
 }
+
+#endif

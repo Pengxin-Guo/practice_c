@@ -13,6 +13,7 @@
 TEST(test, newton_func) {
     EXPECT_EQ(newton(f1, f1_prime, 5), 3);
     EXPECT_EQ(newton(f1, f1_prime, 9), 3);
+    EXPECT_EQ(newton(f1, f1_prime, 30), 8);
 }
 
 
