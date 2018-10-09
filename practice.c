@@ -39,6 +39,26 @@ int max_int(int num, ...) {
     return ans;
 }
 
+// 下面写一个牛顿迭代法代码
+double f1(double x, double n) {
+    return x * x - n;
+}
+
+double f1_prime(double x) {
+    return 2 * x;
+}
+
+double newton(double (*f1)(double, double), double (*f1_prime)(double), double n) {
+    double x = 1.0;
+    #ifndef EPS
+    #define EPS 1e-7
+    while (fabs(f1(x, n)) > EPS) {
+        x -= f1(x, n) / f1_prime(x);
+    }
+    return x;
+    #endif
+}
+
 int main() {
     /*int n = 123;
     printf("%d\n", printf("hello world\n"));
@@ -84,5 +104,7 @@ int main() {
 
     printf("%d\n", max_int(3, 1, 2, 3));
     printf("%d\n", max_int(4, 4, 3, 10, 8));
+    printf("%.2lf\n", newton(f1, f1_prime, 4));
+    printf("%.2lf\n", newton(f1, f1_prime, 2));
     return 0;
 }
