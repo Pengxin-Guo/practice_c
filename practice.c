@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <math.h>
+#include <stdarg.h>
 
 int digit(int n) {
     return floor(log10(n)) + 1;
@@ -24,6 +25,19 @@ struct test {
 struct Data {
     int x, y;
 };
+
+// 下面练习一个变参函数
+int max_int(int num, ...) {
+    int ans = 0, temp;
+    va_list arg;                  // 定义一个va_list类型的变量,并获得num往后的参数列表
+    va_start(arg, num);           // 定位num后面的第一个参数的位置
+    while (num--) {
+        temp = va_arg(arg, int);  // 获取下一个可变参数列表中的参数
+        if (temp > ans) ans = temp; 
+    }
+    va_end(arg);
+    return ans;
+}
 
 int main() {
     /*int n = 123;
@@ -58,7 +72,7 @@ int main() {
     p = &a[0][0];
     printf("%p\n", p);
     printf("%d", *(p + 3));
-    printf("%p %p\n", p, &a[1][0]);*/
+    printf("%p %p\n", p, &a[1][0]);
 
     int arr[2][3] = {-1};
     for (int i = 0; i < 2; i++) {
@@ -66,6 +80,9 @@ int main() {
             printf("%d ", arr[i][j]);
         }
         printf("\n");
-    }
+    }*/
+
+    printf("%d\n", max_int(3, 1, 2, 3));
+    printf("%d\n", max_int(4, 4, 3, 10, 8));
     return 0;
 }
