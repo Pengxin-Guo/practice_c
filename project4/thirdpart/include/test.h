@@ -9,7 +9,6 @@
 #define _TEST_H
 #include <stdlib.h>
 #include <math.h>
-#define EPS 1e-7
 
 struct TestFuncData{
     int total, expect;
@@ -42,12 +41,17 @@ int RUN_ALL_TEST();
     __data->expect += ret; \
 })
 
+#ifndef EPS
+#define EPS 1e-7
+
 #define EXPECT_EQ(a, b) ({ \
     int ret; \
     printf("%s = %s %s\n", #a, #b, (ret = (fabs(a - b) <= EPS)) ? "True" : "False"); \
     __data->total += 1; \
     __data->expect += ret; \
 })
+
+#endif
 
 #define EXPECT_GT(a, b) ({ \
     int ret; \
