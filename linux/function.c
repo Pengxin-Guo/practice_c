@@ -64,5 +64,8 @@ int get_conf_value(char *path_name, char *key_name, char *value) {
 }
 
 int main() {
+    char str[100], key[10] = {"port1"};
+    get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
+    printf("%s\n", str);
     return 0;
 }
