@@ -9,5 +9,8 @@
 #define _HEAD_H
 
 #include <pthread.h>
+#include <sys/types.h>
+#include <string.h>
+#include <unistd.h>
 
 #endif
