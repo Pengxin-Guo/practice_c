@@ -7,9 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h>
-#include <stdarg.h>
-
+#include "./head.h"
 int write_Pi_log (char *PiHealthLog, const char *format, ...);
 //向文件写日志
 //host_t="192.168.1.40";
@@ -25,6 +23,11 @@ int get_conf_value(char *path_name, char *key_name, char *value);
 // getline
 ///path_name为配置文件的路径。key_name是需要照的配置字段名，value是配置的值存放变量。
 //host=192.168.1.40
+
+int send_response(int scokfd, int req);
+int recv_response(int sockfd);
+int check_size(char *filename, int size, char *dir); // filename文件大小大于size时, 打包压缩放在dir目录中去
+
 
 int write_Pi_log(char *PiHealthLog, const char *format, ...) {
     FILE *fp;
@@ -63,9 +66,25 @@ int get_conf_value(char *path_name, char *key_name, char *value) {
     return 0;
 }
 
+int send_response(int sockfd, int req) {
+    if (send(sockfd, &req, sizeof(req), 0) <= 0) {
+        return -1;
+    }
+    return 0;
+}
+
+int recv_response(int sockfd) {
+    int res_recv;
+    if ((recv(sockfd, &res_recv, sizeof(int), 0)) <= 0) {
+        return -1;
+    } 
+    return res_recv;
+}
+
+/*
 int main() {
     char str[100], key[10] = {"port1"};
     get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
     printf("%s\n", str);
     return 0;
-}
+}*/
