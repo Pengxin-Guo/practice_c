@@ -29,7 +29,7 @@ int main() {
             }
         }
         j++;
-        sleep(2);
+        sleep(1);
         //pthread_exit(NULL);            // 退出当前线程, 并没有结束整个进程
 
     }
