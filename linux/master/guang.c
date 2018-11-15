@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "./head.h"
+#include "./master.h"
 
 void *my_fun(void *arg) {
     printf("子线程id:%lu 遍历树莓派\n", pthread_self());
