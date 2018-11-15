@@ -13,23 +13,23 @@
 
 void *func(void *);
 
-int queue[INS + 1] = {0};
+int queue[INS + 1] = {0};                                                // queue[i]代表第i个链表中连接的节点数量
 
 typedef struct Node {
-    int data;
+    int data;                                                            // 数据类型
     struct Node *next;
 }Node, *LinkedList;
 
-LinkedList linkedlist[INS + 1];
+LinkedList linkedlist[INS + 1];                                          // linkedlist[i]代表第i个线程的链表
 
 typedef struct Mypara{
-    char *s;
-    int num;
+    char *s;                                                             // 数据类型(实际项目中应与Node中的data一致)
+    int num;                                                             // 记录是第几个线程
 }Mypara;
 
 //FILE *log[INS + 1];
 
-Node insert(LinkedList head, Node *node, int index) {
+Node insert(LinkedList head, Node *node, int index) {                    // 在head的末尾插入node, 返回虚拟头结点
     Node *p, ret;
     p = &ret;
     ret.data = 0;
@@ -57,7 +57,7 @@ void output(LinkedList head, int num) {
     return ;
 }
 
-int find_min(int N, int *arr) {
+int find_min(int N, int *arr) {                                          // 找到连接的节点数最少的链表, 并返回这个链表下标
     int min = arr[0];
     int ans = 0;
     for (int i = 1; i < N; i++) {
@@ -70,11 +70,11 @@ int find_min(int N, int *arr) {
 }
 
 int main() {
-    freopen("in.in", "r", stdin);
+    freopen("in.in", "r", stdin);                                        // 用in.in这个文件代替标准输入
     pthread_t t[INS + 1];
     Mypara para[INS + 1];
     int temp;
-    for (int i = 0; i < INS; i++) {
+    for (int i = 0; i < INS; i++) {                                      // 开5个子线程
         para[i].s = "Hello HaiZei!";
         para[i].num = i;
         if (pthread_create(&t[i], NULL, func, (void *)&para[i]) == -1) {
@@ -89,7 +89,7 @@ int main() {
     pthread_join(t[2], NULL);
     pthread_join(t[3], NULL);
     pthread_join(t[4], NULL);
-
+    // 等待5个子线程都执行完了, 主线程再继续执行
     while (scanf("%d", &temp) != EOF) {
         int sub = find_min(INS, queue);
         Node *p, ret;
