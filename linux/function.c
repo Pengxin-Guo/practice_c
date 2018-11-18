@@ -81,10 +81,9 @@ int recv_response(int sockfd) {
     return res_recv;
 }
 
-/*
 int main() {
     char str[100], key[10] = {"port1"};
     get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
     printf("%s\n", str);
     return 0;
-}*/
+}
