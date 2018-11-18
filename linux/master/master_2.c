@@ -50,8 +50,7 @@ void output(LinkedList head, int num) {
     Node *p = head;
     char logfile[20];
     while (p) {
-        //printf("%d ", p->data);
-        printf("假装在输出*** ");
+        printf("%s:%d\n", inet_ntoa(p->addr.sin_addr), ntohs(p->addr.sin_port));
         p = p->next;
     }
     printf("\n");
@@ -70,11 +69,65 @@ int find_min(int N, int *arr) {
     return ans;
 }
 
+int get_conf_value(char *pathname, char *key_name, char *value) {
+    FILE *fp = NULL;
+    if ((fp = fopen (pathname, "r")) == NULL) {
+        printf ("pathname NULL!\n");
+        exit(0);
+    }
+    size_t len = 0;
+    char *line = NULL;
+    ssize_t  read;
+    int key_len = strlen(key_name);
+    while (( read = getline(&line, &len, fp)) != -1) {
+        if (strstr(line, key_name) != NULL) {
+            if (line[key_len] == '=') {
+                strncpy(value, &line[key_len + 1], read - key_len - 1);
+                key_len = strlen(value);
+                value[key_len - 1] = '\0';
+                fclose(fp);
+                return 1;
+            }
+        }
+    } 
+    fclose(fp);
+    return 0;
+}
+
 int main() {
     //freopen("in.in", "r", stdin);
     pthread_t t[INS + 1];
     Mypara para[INS + 1];
+    char value[20] = {0}, start[10] = {0}, finish[10] = {0}, port[10] = {0};
+    get_conf_value("./config.conf", "prename", value);
+    get_conf_value("./config.conf", "start", start);
+    get_conf_value("./config.conf", "finish", finish);
+    get_conf_value("./config.conf", "port", port);
+    for (int i = atoi(start); i <= atoi(finish); i++) {
+        char ip[100];
+        sprintf(ip, "%s.%d", value, i);
+        //printf("%s\n", ip);
+        struct sockaddr_in addr;
+        addr.sin_port = htons(atoi(port));
+        addr.sin_addr.s_addr = inet_addr(ip);
+        int sub = find_min(INS, queue);
+        Node *p, ret;
+        p = (Node *)malloc(sizeof(Node));
+        p->addr = addr;
+        p->next = NULL;
+        ret = insert(linkedlist[sub], p, queue[sub]);
+        queue[sub]++;
+        linkedlist[sub] = ret.next;
+    }
+
+    for (int i = 0; i < INS; i++) {
+        printf("%d ", queue[i]);
+        printf("   ......\n");
+        output(linkedlist[i], i);
+    }
+
     int temp;
+    /*
     for (int i = 0; i < INS; i++) {
         //para[i].addr = ?;
         para[i].num = i;
@@ -102,12 +155,8 @@ int main() {
         linkedlist[sub] = ret.next;
     }
 
-    for (int i = 0; i < INS; i++) {
-        printf("%d ", queue[i]);
-        printf("   ......   ");
-        output(linkedlist[i], i);
-    }
     printf("\n");
+    */
     return 0;
 }
 
