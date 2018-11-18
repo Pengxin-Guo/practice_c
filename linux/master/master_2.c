@@ -129,8 +129,6 @@ int main() {
     int temp;
     /*
     for (int i = 0; i < INS; i++) {
-        //para[i].addr = ?;
-        para[i].num = i;
         if (pthread_create(&t[i], NULL, func, (void *)&para[i]) == -1) {
             printf("error\n");
             exit(1);
@@ -143,6 +141,7 @@ int main() {
     pthread_join(t[2], NULL);
     pthread_join(t[3], NULL);
     pthread_join(t[4], NULL);
+    */
 
     while (1) {
         int sub = find_min(INS, queue);
@@ -156,7 +155,7 @@ int main() {
     }
 
     printf("\n");
-    */
+    
     return 0;
 }
 
