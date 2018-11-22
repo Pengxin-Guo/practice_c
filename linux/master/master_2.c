@@ -40,7 +40,7 @@ Node insert(LinkedList head, Node *node, int index) {
         --index;
     }
     if (index == 0) {
-        node->next = p->next;
+        //node->next = p->next;
         p->next = node;
         //ret.data = 1;
     }
@@ -135,16 +135,18 @@ int exist(struct sockaddr_in addr) {
     return 0;
 }
 
-Node *delete_node(LinkedList head, Node *del) {
+Node *delete_node(LinkedList head, Node *del, int pid) {
     Node *p, *q, ret;
     ret.next = head;
     p = &ret;
-    q = p->next;
+    q = head;
     while (q) {
         if (q->addr.sin_addr.s_addr == del->addr.sin_addr.s_addr) {
             //printf("delete %s:%d\n", inet_ntoa(q->addr.sin_addr), ntohs(q->addr.sin_port));
             p->next = q->next;
             free(q);
+            queue[pid]--;
+            //printf("%d -> %d\n", pid, queue[pid]);
             break;
         }
         p = p->next;
@@ -153,14 +155,14 @@ Node *delete_node(LinkedList head, Node *del) {
     return ret.next;
 }
 
-void connect_or_delete(LinkedList head) {
+void connect_or_delete(LinkedList head, int pid) {
     Node *p = head, *temp;
     while (p) {
         int sockfd;
         if (connect(sockfd, (struct sockaddr *)&(p->addr), sizeof(struct sockaddr)) < 0) {
             //printf("connect error\n");
             temp = p->next;
-            head = delete_node(head, p);
+            head = delete_node(head, p, pid);
             p = temp;
         } else {
             p = p->next;
@@ -248,7 +250,7 @@ int main() {
 void *func(void *argv) {
     Mypara *para;
     para = (Mypara *)argv;
-    connect_or_delete(linkedlist[para->num]);
+    connect_or_delete(linkedlist[para->num], para->num);
     /*
     //printf("%s %d\n", para->s, para->num);
     Node *p, ret;
