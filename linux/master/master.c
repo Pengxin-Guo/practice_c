@@ -269,7 +269,7 @@ int main() {
         output(linkedlist[sub], sub);
         close(socketfd);
     }
-    close(server_listen);
+    //close(server_listen);
     /*
     pthread_join(t[0], NULL);
     pthread_join(t[1], NULL);
