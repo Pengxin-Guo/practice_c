@@ -118,7 +118,7 @@ int create_listen(int port) {
     my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(port);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	bzero(&(my_addr.sin_zero), sizeof(my_addr));
+    //bzero(&(my_addr.sin_zero), sizeof(my_addr)); 
     if (bind(server_listen, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) < 0) {
 		perror("bind error");
         close(server_listen);
