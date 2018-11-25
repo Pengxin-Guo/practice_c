@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "./client.h"
 #define PORT 33333                                                    // master端开的端口
-#define PORT1 6666                                                    // client端开的端口
+#define PORT1 9999                                                    // client端开的端口
 #define host "192.168.1.157"                                          // master端的ip
 
 int create_listen(int port) {
@@ -26,7 +26,7 @@ int create_listen(int port) {
     if (bind(server_listen, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) < 0) {
 		perror("bind error");
         //close(server_listen);
-		return -1;
+		exit(0);
 	}
     if (listen(server_listen, 20) < 0) {
         perror("listen error");
@@ -47,8 +47,8 @@ int main () {
     dest_addr.sin_addr.s_addr = inet_addr(host);
     if (connect(sock_client, (struct sockaddr *)&dest_addr, sizeof(dest_addr)) < 0) {
         perror("Connect");
+        close(sock_client);
         exit(0);
-	    close(sock_client);
     } else printf ("Connect success!\n");
 
     close(sock_client);
