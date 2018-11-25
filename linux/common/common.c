@@ -88,7 +88,8 @@ int file_size(char *filename) {
 }
 
 int check_size(char *filename, int size, char *dir) {
-    if (file_size(filename) >= size) {
+    //printf("%d\n", file_size(filename));
+    if (file_size(filename) >= size * 1024 * 1024) {
         char command[50];
         sprintf(command, "zip -r %s %s", dir, filename);
         system(command); 
@@ -96,13 +97,12 @@ int check_size(char *filename, int size, char *dir) {
     return 0;
 }
 
-
 /*
 int main() {
     //char str[100], key[10] = {"port1"};
     //get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
     //printf("%s\n", str);
-    check_size("./common.h", 10000000, "./cc");
+    check_size("./common.h", 30, "./cc");
     return 0;
 }
 */
