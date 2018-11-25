@@ -35,7 +35,7 @@ int create_listen(int port) {
     return server_listen;
 }
 
-int main () { 
+int main () {
     int sock_client;
     struct sockaddr_in dest_addr; 
     if ((sock_client = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -50,9 +50,8 @@ int main () {
         close(sock_client);
         exit(0);
     } else printf ("Connect success!\n");
-
     close(sock_client);
-    
+
     int client_listen = create_listen(PORT1);
     while (1) {
         struct sockaddr_in server_addr;
