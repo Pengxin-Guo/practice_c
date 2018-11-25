@@ -192,12 +192,12 @@ void connect_or_delete(LinkedList head, int pid) {
     Node *p = head->next, *temp;
     while (p) {
         if (connect_client(p) == 0) {
-            pthread_mutex_lock(&mut[pid]);
             //printf("connect error\n");
             temp = p->next;
+            pthread_mutex_lock(&mut[pid]);
             delete_node(head, p, pid);
-            p = temp;
             pthread_mutex_unlock(&mut[pid]);
+            p = temp;
         } else {
             p = p->next;
         }
@@ -289,4 +289,3 @@ void *func(void *argv) {
     }
     return NULL;
 }
-
