@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "./client.h"
 #define PORT 33333                                                    // master端开的端口
-#define PORT1 66666                                                   // client端开的端口
+#define PORT1 6666                                                    // client端开的端口
 #define host "192.168.1.157"                                          // master端的ip
 
 int create_listen(int port) {
