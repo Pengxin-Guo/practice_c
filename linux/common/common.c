@@ -80,10 +80,29 @@ int recv_response(int sockfd) {
     return res_recv;
 }
 
+int file_size(char *filename) {
+    struct stat statbuf;
+    stat(filename,&statbuf);
+    int size=statbuf.st_size;
+    return size;
+}
+
+int check_size(char *filename, int size, char *dir) {
+    if (file_size(filename) >= size) {
+        char command[50];
+        sprintf(command, "zip -r %s %s", dir, filename);
+        system(command); 
+    }
+    return 0;
+}
+
+
 /*
 int main() {
-    char str[100], key[10] = {"port1"};
-    get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
-    printf("%s\n", str);
+    //char str[100], key[10] = {"port1"};
+    //get_conf_value("./PiHealthyLog/PiHealthLog.conf", key, str);
+    //printf("%s\n", str);
+    check_size("./common.h", 10000000, "./cc");
     return 0;
-}*/
+}
+*/
