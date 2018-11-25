@@ -53,9 +53,10 @@ void insert(LinkedList head, Node *node, int index) {
 
 void output(LinkedList head, int num) {
     if (head->next == NULL) {
-        printf("empty\n");
+        printf("linkedlist %d is empty\n", num);
         return ;
     }
+    printf("linkedlist %d has %d node\n", num, queue[num]);
     Node *p = head->next;
     char logfile[20];
     while (p) {
@@ -145,11 +146,11 @@ void delete_node(LinkedList head, Node *del, int pid) {
     q = head->next;
     while (q) {
         if (q->addr.sin_addr.s_addr == del->addr.sin_addr.s_addr) {
-            printf("delete %s:%d * %d\n", inet_ntoa(q->addr.sin_addr), ntohs(q->addr.sin_port), queue[pid]);
+            printf("delete %s:%d\n", inet_ntoa(q->addr.sin_addr), ntohs(q->addr.sin_port));
             p->next = q->next;
             free(q);
             queue[pid]--;
-            sleep(2);
+            //sleep(2);
             //printf("%d -> %d\n", pid, queue[pid]);
             break;
         }
@@ -159,16 +160,32 @@ void delete_node(LinkedList head, Node *del, int pid) {
     return ;
 }
 
+int connect_client(Node *p) {
+    int sockfd;
+    struct sockaddr_in addr;
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        close(sockfd);
+        perror("socket failed\n");
+        return 0;
+    }
+    char port[10] = {0};
+    get_conf_value("./config.conf", "port", port);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(atoi(port));
+    addr.sin_addr.s_addr = p->addr.sin_addr.s_addr;
+    if (connect(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+        close(sockfd);
+        return 0;
+    }
+    close(sockfd);
+    return 1;
+}
+
 void connect_or_delete(LinkedList head, int pid) {
     if (head->next == 0) return ;
     Node *p = head->next, *temp;
     while (p) {
-        int sockfd;
-        char port[10] = {0};
-        get_conf_value("./config.conf", "port", port);
-        (p->addr).sin_port = htons(atoi(port));
-        printf("%d\n", ntohs(p->addr.sin_port));
-        if (connect(sockfd, (struct sockaddr *)&(p->addr), sizeof(struct sockaddr)) < 0) {
+        if (connect_client(p) == 0) {
             //printf("connect error\n");
             temp = p->next;
             delete_node(head, p, pid);
@@ -177,7 +194,7 @@ void connect_or_delete(LinkedList head, int pid) {
             p = p->next;
         }
     }
-    output(head, 1);
+    //output(head, pid);
     return ; 
 }
 
