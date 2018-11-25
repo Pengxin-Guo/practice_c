@@ -38,15 +38,12 @@ void init_linkedlist(int n) {
 
 void insert(LinkedList head, Node *node, int index) {
     Node *p = head;
-    //ret.data = 0;
     while (p && index) {
         p = p->next;
         --index;
     }
     if (index == 0) {
-        //node->next = p->next;
         p->next = node;
-        //ret.data = 1;
     }
     return ;
 }
@@ -117,7 +114,7 @@ int create_listen(int port) {
 	bzero(&(my_addr.sin_zero), sizeof(my_addr));
     if (bind(server_listen, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) < 0) {
 		perror("bind error");
-        //close(server_listen);
+        close(server_listen);
 		return -1;
 	}
     if (listen(server_listen, 20) < 0) {
@@ -150,8 +147,6 @@ void delete_node(LinkedList head, Node *del, int pid) {
             p->next = q->next;
             free(q);
             queue[pid]--;
-            //sleep(2);
-            //printf("%d -> %d\n", pid, queue[pid]);
             break;
         }
         p = p->next;
@@ -211,7 +206,6 @@ int main() {
     for (int i = atoi(start); i <= atoi(finish); i++) {
         char ip[100];
         sprintf(ip, "%s.%d", value, i);
-        //printf("%s\n", ip);
         struct sockaddr_in addr;
         addr.sin_port = htons(atoi(port));
         addr.sin_addr.s_addr = inet_addr(ip);
@@ -223,7 +217,6 @@ int main() {
         insert(linkedlist[sub], p, queue[sub]);
         queue[sub]++;
     }
-    //sleep(1);
     /*
     for (int i = 0; i < INS; i++) {
         printf("%d ", queue[i]);
@@ -277,7 +270,8 @@ void *func(void *argv) {
     Mypara *para;
     para = (Mypara *)argv;
     while (1) {
-        connect_or_delete(linkedlist[para->num], para->num);     
+        connect_or_delete(linkedlist[para->num], para->num);
+        sleep(2);
     }
     /*
     //printf("%s %d\n", para->s, para->num);
