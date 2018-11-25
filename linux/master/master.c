@@ -10,11 +10,12 @@
 #include "./master.h"
 
 #define INS 5
-#define PORT 33333
+#define PORT 33333                                             // 建立的监听端口
 
 void *func(void *);
 
-int queue[INS + 1] = {0};
+int queue[INS + 1] = {0};                                      // 存储每个链表有几个节点
+pthread_mutex_t mut[INS + 1];                                  // 用来给每个链表加锁
 
 typedef struct Node {
     struct sockaddr_in addr;
@@ -28,6 +29,7 @@ typedef struct Mypara{
     int num;
 }Mypara;
 
+// 初始化5个链表, 有一个没用的头结点
 void init_linkedlist(int n) {
     for (int i = 0; i < n; i++) {
         linkedlist[i] = (LinkedList)malloc(sizeof(Node));
@@ -36,6 +38,7 @@ void init_linkedlist(int n) {
     return ;
 }
 
+// 在链表head的尾部插入节点node
 void insert(LinkedList head, Node *node, int index) {
     Node *p = head;
     while (p && index) {
@@ -48,6 +51,7 @@ void insert(LinkedList head, Node *node, int index) {
     return ;
 }
 
+// 输出链表head的所有节点
 void output(LinkedList head, int num) {
     if (head->next == NULL) {
         printf("linkedlist %d is empty\n", num);
@@ -64,6 +68,7 @@ void output(LinkedList head, int num) {
     return ;
 }
 
+// 找到链表长度最短的链表
 int find_min(int N, int *arr) {
     int min = arr[0];
     int ans = 0;
@@ -76,6 +81,7 @@ int find_min(int N, int *arr) {
     return ans;
 }
 
+// 从配置文件pathname中读取信息key_name, 存在字符串value中
 int get_conf_value(char *pathname, char *key_name, char *value) {
     FILE *fp = NULL;
     if ((fp = fopen (pathname, "r")) == NULL) {
@@ -101,6 +107,7 @@ int get_conf_value(char *pathname, char *key_name, char *value) {
     return 0;
 }
 
+// 创建端口号为port的监听
 int create_listen(int port) {
     int server_listen;
     struct sockaddr_in my_addr;
@@ -124,6 +131,7 @@ int create_listen(int port) {
     return server_listen;
 }
 
+// 判断这个客户端是否已经加在了链表中
 int exist(struct sockaddr_in addr) {
     for (int i = 0; i < INS; i++) {
         Node *p = linkedlist[i]->next;
@@ -137,6 +145,7 @@ int exist(struct sockaddr_in addr) {
     return 0;
 }
 
+// 删除节点
 void delete_node(LinkedList head, Node *del, int pid) {
     Node *p, *q;
     p = head;
@@ -155,6 +164,7 @@ void delete_node(LinkedList head, Node *del, int pid) {
     return ;
 }
 
+// 连接客户端
 int connect_client(Node *p) {
     int sockfd;
     struct sockaddr_in addr;
@@ -176,20 +186,22 @@ int connect_client(Node *p) {
     return 1;
 }
 
+// 遍历链表, 判断是否可以连接到客户端, 连接不到的删除
 void connect_or_delete(LinkedList head, int pid) {
     if (head->next == 0) return ;
     Node *p = head->next, *temp;
     while (p) {
         if (connect_client(p) == 0) {
+            pthread_mutex_lock(&mut[pid]);
             //printf("connect error\n");
             temp = p->next;
             delete_node(head, p, pid);
             p = temp;
+            pthread_mutex_unlock(&mut[pid]);
         } else {
             p = p->next;
         }
     }
-    //output(head, pid);
     return ; 
 }
 
@@ -231,13 +243,6 @@ int main() {
             exit(1);
         }
     }
-    /*
-    pthread_join(t[0], NULL);
-    pthread_join(t[1], NULL);
-    pthread_join(t[2], NULL);
-    pthread_join(t[3], NULL);
-    pthread_join(t[4], NULL);
-    */
     int server_listen = create_listen(PORT);
     while (1) {
         struct sockaddr_in client_addr;
@@ -256,13 +261,22 @@ int main() {
         p = (Node *)malloc(sizeof(Node));
         p->addr = client_addr;
         p->next = NULL;
+        pthread_mutex_lock(&mut[sub]);
         insert(linkedlist[sub], p, queue[sub]);
+        pthread_mutex_unlock(&mut[sub]);
         queue[sub]++;
         printf("insert into %d linkedlist\n", sub);
         output(linkedlist[sub], sub);
         close(socketfd);
     }
     close(server_listen);
+    /*
+    pthread_join(t[0], NULL);
+    pthread_join(t[1], NULL);
+    pthread_join(t[2], NULL);
+    pthread_join(t[3], NULL);
+    pthread_join(t[4], NULL);
+    */
     return 0;
 }
 
@@ -273,16 +287,6 @@ void *func(void *argv) {
         connect_or_delete(linkedlist[para->num], para->num);
         sleep(2);
     }
-    /*
-    //printf("%s %d\n", para->s, para->num);
-    Node *p, ret;
-    p = (Node *)malloc(sizeof(Node));
-    p->addr = para->addr;
-    p->next = NULL;
-    ret = insert(linkedlist[para->num], p, queue[para->num]);
-    queue[para->num]++;
-    linkedlist[para->num] = ret.next;
-    */
     return NULL;
 }
 
