@@ -28,14 +28,18 @@ typedef struct Mypara{
     int num;
 }Mypara;
 
-//FILE *log[INS + 1];
+void init_linkedlist(int n) {
+    for (int i = 0; i < n; i++) {
+        linkedlist[i] = (LinkedList)malloc(sizeof(Node));
+        linkedlist[i]->next = NULL;
+    }
+    return ;
+}
 
-Node insert(LinkedList head, Node *node, int index) {
-    Node *p, ret;
-    p = &ret;
+void insert(LinkedList head, Node *node, int index) {
+    Node *p = head;
     //ret.data = 0;
-    ret.next = head;
-    while (p->next && index) {
+    while (p && index) {
         p = p->next;
         --index;
     }
@@ -44,15 +48,15 @@ Node insert(LinkedList head, Node *node, int index) {
         p->next = node;
         //ret.data = 1;
     }
-    return ret;
+    return ;
 }
 
 void output(LinkedList head, int num) {
-    if (head == NULL) {
+    if (head->next == NULL) {
         printf("empty\n");
         return ;
     }
-    Node *p = head;
+    Node *p = head->next;
     char logfile[20];
     while (p) {
         printf("%s:%d\n", inet_ntoa(p->addr.sin_addr), ntohs(p->addr.sin_port));
@@ -107,7 +111,7 @@ int create_listen(int port) {
         exit(1);
     }
     my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(PORT);
+	my_addr.sin_port = htons(port);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	bzero(&(my_addr.sin_zero), sizeof(my_addr));
     if (bind(server_listen, (struct sockaddr*)&my_addr, sizeof(struct sockaddr)) < 0) {
@@ -124,7 +128,7 @@ int create_listen(int port) {
 
 int exist(struct sockaddr_in addr) {
     for (int i = 0; i < INS; i++) {
-        Node *p = linkedlist[i];
+        Node *p = linkedlist[i]->next;
         while (p) {
             if (p->addr.sin_addr.s_addr == addr.sin_addr.s_addr) {
                 return 1;
@@ -135,45 +139,51 @@ int exist(struct sockaddr_in addr) {
     return 0;
 }
 
-Node *delete_node(LinkedList head, Node *del, int pid) {
-    Node *p, *q, ret;
-    ret.next = head;
-    p = &ret;
-    q = head;
+void delete_node(LinkedList head, Node *del, int pid) {
+    Node *p, *q;
+    p = head;
+    q = head->next;
     while (q) {
         if (q->addr.sin_addr.s_addr == del->addr.sin_addr.s_addr) {
-            //printf("delete %s:%d\n", inet_ntoa(q->addr.sin_addr), ntohs(q->addr.sin_port));
+            printf("delete %s:%d * %d\n", inet_ntoa(q->addr.sin_addr), ntohs(q->addr.sin_port), queue[pid]);
             p->next = q->next;
             free(q);
             queue[pid]--;
+            sleep(2);
             //printf("%d -> %d\n", pid, queue[pid]);
             break;
         }
         p = p->next;
         q = q->next;
     }
-    return ret.next;
+    return ;
 }
 
 void connect_or_delete(LinkedList head, int pid) {
-    Node *p = head, *temp;
+    if (head->next == 0) return ;
+    Node *p = head->next, *temp;
     while (p) {
         int sockfd;
+        char port[10] = {0};
+        get_conf_value("./config.conf", "port", port);
+        (p->addr).sin_port = htons(atoi(port));
+        printf("%d\n", ntohs(p->addr.sin_port));
         if (connect(sockfd, (struct sockaddr *)&(p->addr), sizeof(struct sockaddr)) < 0) {
             //printf("connect error\n");
             temp = p->next;
-            head = delete_node(head, p, pid);
+            delete_node(head, p, pid);
             p = temp;
         } else {
             p = p->next;
         }
     }
     output(head, 1);
-   return ; 
+    return ; 
 }
 
 int main() {
     //freopen("in.in", "r", stdin);
+    init_linkedlist(INS);
     pthread_t t[INS + 1];
     Mypara para[INS + 1];
     char value[20] = {0}, start[10] = {0}, finish[10] = {0}, port[10] = {0};
@@ -189,13 +199,12 @@ int main() {
         addr.sin_port = htons(atoi(port));
         addr.sin_addr.s_addr = inet_addr(ip);
         int sub = find_min(INS, queue);
-        Node *p, ret;
+        Node *p;
         p = (Node *)malloc(sizeof(Node));
         p->addr = addr;
         p->next = NULL;
-        ret = insert(linkedlist[sub], p, queue[sub]);
+        insert(linkedlist[sub], p, queue[sub]);
         queue[sub]++;
-        linkedlist[sub] = ret.next;
     }
     //sleep(1);
     /*
@@ -211,7 +220,6 @@ int main() {
             printf("error\n");
             exit(1);
         }
-        //printf("Current pthread id = %ld\n", t[i]);
     }
     /*
     pthread_join(t[0], NULL);
@@ -227,30 +235,33 @@ int main() {
         int socketfd;
         if ((socketfd = accept(server_listen, (struct sockaddr*)&client_addr, &len)) < 0) {
             perror("accept error");
-            break;
+            continue;
         }
         if (exist(client_addr)) {
             printf("already exists\n");
             continue;
         }
         int sub = find_min(INS, queue);
-        Node *p, ret;
+        Node *p;
         p = (Node *)malloc(sizeof(Node));
         p->addr = client_addr;
         p->next = NULL;
-        ret = insert(linkedlist[sub], p, queue[sub]);
+        insert(linkedlist[sub], p, queue[sub]);
         queue[sub]++;
-        linkedlist[sub] = ret.next;
         printf("insert into %d linkedlist\n", sub);
         output(linkedlist[sub], sub);
+        close(socketfd);
     }
+    close(server_listen);
     return 0;
 }
 
 void *func(void *argv) {
     Mypara *para;
     para = (Mypara *)argv;
-    connect_or_delete(linkedlist[para->num], para->num);
+    while (1) {
+        connect_or_delete(linkedlist[para->num], para->num);     
+    }
     /*
     //printf("%s %d\n", para->s, para->num);
     Node *p, ret;
@@ -263,3 +274,4 @@ void *func(void *argv) {
     */
     return NULL;
 }
+
