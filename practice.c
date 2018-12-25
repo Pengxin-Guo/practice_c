@@ -106,5 +106,9 @@ int main() {
     printf("%d\n", max_int(4, 4, 3, 10, 8));
     printf("%.2lf\n", newton(f1, f1_prime, 4));
     printf("%.2lf\n", newton(f1, f1_prime, 2));
+
+    for (int i = 0; i < 10; i++) {
+        printf("%d\n", i);
+    }
     return 0;
 }
