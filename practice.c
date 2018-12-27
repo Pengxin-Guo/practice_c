@@ -59,6 +59,20 @@ double newton(double (*f1)(double, double), double (*f1_prime)(double), double n
     #endif
 }
 
+int const a = 1;
+
+int add() {
+    return 1;
+}
+
+int add(int a) {
+    return a;
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
 int main() {
     /*int n = 123;
     printf("%d\n", printf("hello world\n"));
@@ -102,6 +116,7 @@ int main() {
         printf("\n");
     }*/
 
+    /*
     printf("%d\n", max_int(3, 1, 2, 3));
     printf("%d\n", max_int(4, 4, 3, 10, 8));
     printf("%.2lf\n", newton(f1, f1_prime, 4));
@@ -110,5 +125,11 @@ int main() {
     for (int i = 0; i < 10; i++) {
         printf("%d\n", i);
     }
+    */
+
+    const int a = 5;
+    int *p = (int *)&a;
+    *p = 6;
+    printf("%d, %d\n", a, *p);
     return 0;
 }
