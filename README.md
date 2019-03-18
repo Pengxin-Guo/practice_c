@@ -1,2 +1,2 @@
 # practice_c
-practice for c
+海贼 `c` 课程代码
